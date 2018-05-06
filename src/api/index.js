@@ -1,4 +1,9 @@
 var Pokedex = require('pokedex-promise-v2');
-var P = new Pokedex();
+
+var options = {
+    protocol: 'https'
+}
+
+var P = new Pokedex(options);
 
 export default P;
