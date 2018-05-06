@@ -75,15 +75,17 @@ class PokeItem extends PureComponent {
         const { expanded } = this.state;
         const saved = savedPokes && savedPokes.indexOf(name) !== -1;
         return (
-            <List.Item>
-                <Row>
-                    <Col xs={{ span: 18, offset: 3 }} onClick={this.onClick}><h3>{capitalizeFirstLetter(name)}</h3></Col>
-                    <Col xs={{ span: 3}}>
-                        <Button onClick={() => user.savePoke(name)} shape="circle" icon={saved ? "heart" : "heart-o"} />
-                    </Col>
-                </Row>
+            <Row>
+                <List.Item>
+                    <Row>
+                        <Col xs={{ span: 18, offset: 3 }} onClick={this.onClick}><h3>{capitalizeFirstLetter(name)}</h3></Col>
+                        <Col xs={{ span: 3}}>
+                            <Button onClick={() => user.savePoke(name)} shape="circle" icon={saved ? "heart" : "heart-o"} />
+                        </Col>
+                    </Row>
+                </List.Item>
                 {expanded && <Info onClick={this.onClick} data={ pokes && pokes[name] || null }/>}
-            </List.Item>
+            </Row>
         )
     }
 }

@@ -9,6 +9,7 @@ import Item from './../PokeItem';
 import data from './../../actions/data';
 
 const { Content } = Layout;
+const ITEM_HEIGHT = 50;
 
 class ContentWrapper extends PureComponent {
     constructor() {
@@ -20,7 +21,11 @@ class ContentWrapper extends PureComponent {
         }
     }
     componentDidMount() {
-        data.loadPokeList(20);
+        window.addEventListener('resize', this.handleInfiniteOnLoad);
+        data.loadPokeList(this.getNumInColumn());
+    }
+    getNumInColumn = () => {
+        return parseInt(window.innerHeight / ITEM_HEIGHT) + 1;
     }
     handleInfiniteOnLoad = () => {
         let { list, total } = this.props;
@@ -30,7 +35,7 @@ class ContentWrapper extends PureComponent {
             this.setState({ hasMore: false });
             return;
         }
-        data.loadPokeList(20);
+        data.loadPokeList(this.getNumInColumn());
     }
     render() {
         const { list } = this.props;
