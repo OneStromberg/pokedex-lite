@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { List, message, Avatar, Spin } from 'antd';
+import { withRouter, Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroller';
@@ -52,10 +53,19 @@ class C extends PureComponent {
     }
 }
 
-const mapStateToProps = ({ data: { list, total }, user: { searchValue } }) => {
+const mapStateToProps = ({ data: { list, total }, user: { savedPokes } }) => {
 	return {
-		list, total
+		list, total, savedPokes
 	};
 };
 
-export default connect(mapStateToProps)(C);
+const ContentRouter = ({ list, total, savedPokes }) => {
+    return (
+        <Switch>
+            <Route exact path="/saved" render={() => <C list={savedPokes} total={savedPokes.length} />}/>
+            <Route path="*" render={() => <C list={list} total={total} />}/>
+        </Switch>
+    )
+}
+
+export default withRouter(connect(mapStateToProps)(ContentRouter));

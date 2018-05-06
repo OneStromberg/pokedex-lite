@@ -1,5 +1,5 @@
 import { call, fork, all, put, select, takeEvery, take } from 'redux-saga/effects';
-import { storedPokes } from '../reducers/data';
+import { storedPokes, storedPokesList } from '../reducers/data';
 import { eventChannel } from 'redux-saga';
 import * as Actions from '../actions';
 import Api from '../api';
@@ -8,7 +8,8 @@ import * as Storage from '../storage';
 const { Action } = Actions;
 
 function* getPokeList({ payload: { limit, offset } }) {
-  const result = yield call(Api.getPokemonsList, { limit, offset });
+  const pokeList = yield select(storedPokesList);
+  const result = yield call(Api.getPokemonsList, { limit, offset: pokeList.length });
   yield put(Action(Actions.POKE_LIST_LOADED, result));
 }
 

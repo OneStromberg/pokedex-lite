@@ -1,6 +1,7 @@
 import React, {PureComponent, Component} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import { List, Spin, Progress, Card, Row, Col, Button } from 'antd';
 import Flexbox from 'flexbox-react';
 
@@ -25,17 +26,19 @@ const Stats = ({ data }) => {
     </Card>)
 }
 
-const Info = ({ data }) => {
+const Info = ({ data, onClick }) => {
     if (!data) {
         return <Spin />
     }
 
     const { height, weight, stats, sprites, name } = data
 
-    return (<Row>
-        <img src={sprites['front_default']} alt={name} />
-        <p>height: { height }</p>
-        <p>weight: { weight }</p>
+    return (<Row onClick={onClick}>
+        <Flexbox alignItems="center" flexDirection="column">
+            <img src={sprites['front_default']} alt={name} />
+            <p>height: { height }</p>
+            <p>weight: { weight }</p>
+        </Flexbox>
         <Stats data={ stats }/>
     </Row>)
 }
@@ -45,6 +48,13 @@ class PokeItem extends Component {
         super();
         this.state = {
             expanded: false
+        }
+    }
+    componentWillReceiveProps(nextProps){
+        if (nextProps.location.pathname != this.props.location.pathname){
+            this.setState({
+                expanded: false
+            })
         }
     }
     onClick = () => {
@@ -73,7 +83,7 @@ class PokeItem extends Component {
                         <Button onClick={() => user.savePoke(name)} shape="circle" icon={saved ? "heart" : "heart-o"} />
                     </Col>
                 </Row>
-                {expanded && <Info data={ pokes[name] || null }/>}
+                {expanded && <Info onClick={this.onClick} data={ pokes[name] || null }/>}
             </List.Item>
         )
     }
@@ -83,4 +93,4 @@ const mapStateToProps = ({data: { pokes }, user: { savedPokes }}) => {
     return { user, pokes, savedPokes };
 };
 
-export default connect(mapStateToProps)(PokeItem);
+export default withRouter(connect(mapStateToProps)(PokeItem));

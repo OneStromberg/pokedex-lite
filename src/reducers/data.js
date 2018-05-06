@@ -26,3 +26,4 @@ export default function data(state = initialState, action) {
 }
 
 export const storedPokes = state => state.data.pokes;
+export const storedPokesList = state => state.data.list;
