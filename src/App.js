@@ -41,29 +41,28 @@ class App extends Component{
 				overlay: !collapsed,
 			});
 		}
-	};
+	}
 	getChildContext = () => {
 		return { siderToggled: this.siderToggled };
-	};
+	}
 	onAppClick = () => {
 		if (this.state.overlay) {
 			this.setState({
 				overlay: !this.state.overlay,
 			});
 		}
-	};
-	
+	}
 	render() {
+		const appClassName = cn('App', this.state.overlay && 'Overlay');
 		return (
 			<ApplicationWrapper>
 				<Layout>
 					<Sider collapsed={!this.state.overlay}/>
-					<Layout id="App" className={cn('App', this.state.overlay && 'Overlay')}
+					<Layout className={appClassName}
 							onClick={this.onAppClick}>
 						<Header/>
 						<Content/>
 					</Layout>
-					<PopupWrapper/>
 				</Layout>
 			</ApplicationWrapper>
 		);
