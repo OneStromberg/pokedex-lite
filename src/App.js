@@ -13,6 +13,8 @@ import Header from './components/Header';
 import Content from './components/Content';
 import Sider from './components/Sider';
 
+import "./styles.less"
+
 function ApplicationWrapper({ children }) {
 	return (
 		<Provider store={store}>

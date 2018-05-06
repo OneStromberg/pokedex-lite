@@ -4,15 +4,10 @@ import { Layout } from 'antd';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroller';
 
+import Item from './../PokeItem';
 import data from './../../actions/data';
 
 const { Content } = Layout;
-
-const Item = (name) => {
-    return (<List.Item>
-      <div>{name}</div>
-    </List.Item>)
-}
 
 class C extends PureComponent {
     constructor() {
@@ -24,7 +19,7 @@ class C extends PureComponent {
         }
     }
     componentDidMount() {
-        data.loadPoke(20);
+        data.loadPokeList(20);
     }
     handleInfiniteOnLoad = () => {
         let { list, total } = this.props;
@@ -34,7 +29,7 @@ class C extends PureComponent {
             this.setState({ hasMore: false });
             return;
         }
-        data.loadPoke(20);
+        data.loadPokeList(20);
     }
     render() {
         const { list } = this.props;
@@ -46,11 +41,9 @@ class C extends PureComponent {
                     loadMore={this.handleInfiniteOnLoad}
                     hasMore={this.state.hasMore}
                     useWindow={true}>
-                    <List dataSource={list} renderItem={Item}>
+                    <List dataSource={list} renderItem={name => <Item name={name} /> }>
                         {this.state.loading && this.state.hasMore && (
-                            <div className="demo-loading-container">
-                                <Spin/>
-                            </div>
+                            <Spin/>
                         )}
                     </List>
                 </InfiniteScroll>
@@ -59,7 +52,7 @@ class C extends PureComponent {
     }
 }
 
-const mapStateToProps = ({ data: { list, total }, user }) => {
+const mapStateToProps = ({ data: { list, total }, user: { searchValue } }) => {
 	return {
 		list, total
 	};
