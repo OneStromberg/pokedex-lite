@@ -1,5 +1,4 @@
-import React, {PureComponent, Component} from 'react';
-import PropTypes from 'prop-types';
+import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { List, Spin, Progress, Card, Row, Col, Button } from 'antd';
@@ -43,7 +42,7 @@ const Info = ({ data, onClick }) => {
     </Row>)
 }
 
-class PokeItem extends Component {
+class PokeItem extends PureComponent {
     constructor(){
         super();
         this.state = {
@@ -51,7 +50,7 @@ class PokeItem extends Component {
         }
     }
     componentWillReceiveProps(nextProps){
-        if (nextProps.location.pathname != this.props.location.pathname){
+        if (nextProps.location.pathname !== this.props.location.pathname){
             this.setState({
                 expanded: false
             })
@@ -74,7 +73,7 @@ class PokeItem extends Component {
     render() {
         const { name, pokes, savedPokes } = this.props;
         const { expanded } = this.state;
-        const saved = savedPokes.indexOf(name) !== -1;
+        const saved = savedPokes && savedPokes.indexOf(name) !== -1;
         return (
             <List.Item>
                 <Row>
@@ -83,7 +82,7 @@ class PokeItem extends Component {
                         <Button onClick={() => user.savePoke(name)} shape="circle" icon={saved ? "heart" : "heart-o"} />
                     </Col>
                 </Row>
-                {expanded && <Info onClick={this.onClick} data={ pokes[name] || null }/>}
+                {expanded && <Info onClick={this.onClick} data={ pokes && pokes[name] || null }/>}
             </List.Item>
         )
     }

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { withRouter } from 'react-router-dom';
 import { Router } from 'react-router';
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import { Layout } from 'antd';
 import cn from 'classnames';
 

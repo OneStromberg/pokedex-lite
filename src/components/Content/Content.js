@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { List, message, Avatar, Spin } from 'antd';
+import { List, message, Spin } from 'antd';
 import { withRouter, Switch, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import data from './../../actions/data';
 
 const { Content } = Layout;
 
-class C extends PureComponent {
+class ContentWrapper extends PureComponent {
     constructor() {
         super();
         this.state = {
@@ -62,8 +62,8 @@ const mapStateToProps = ({ data: { list, total }, user: { savedPokes } }) => {
 const ContentRouter = ({ list, total, savedPokes }) => {
     return (
         <Switch>
-            <Route exact path="/saved" render={() => <C list={savedPokes} total={savedPokes.length} />}/>
-            <Route path="*" render={() => <C list={list} total={total} />}/>
+            <Route exact path="/saved" render={() => <ContentWrapper list={savedPokes || null} total={savedPokes && savedPokes.length || 0} />}/>
+            <Route path="*" render={() => <ContentWrapper list={list || null} total={total || 0} />}/>
         </Switch>
     )
 }

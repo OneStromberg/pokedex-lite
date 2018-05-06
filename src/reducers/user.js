@@ -9,15 +9,20 @@ export default function user(state = initialState, action) {
     let { savedPokes } = state;
     switch (type) {
         case SAVE_POKE: 
-            var index = savedPokes.indexOf(payload);
-            if (index === -1) {
-                savedPokes = [...savedPokes, payload];
-            } else {
-                savedPokes.splice(index, 1);
+            if (payload) {
+                var index = savedPokes.indexOf(payload);
+                if (index === -1) {
+                    savedPokes = [...savedPokes, payload];
+                } else {
+                    savedPokes.splice(index, 1);
+                }
+                return { ...state, savedPokes: [...savedPokes] }
             }
-            return { ...state, savedPokes: [...savedPokes] }
+            return state;
         case POKE_LOADED_FROM_STORAGE:
-            savedPokes = savedPokes.concat(payload);
+            if (payload && Array.isArray(payload)){
+                savedPokes = savedPokes.concat(payload);
+            }
             return { ...state, savedPokes }
         default:
             return state;
