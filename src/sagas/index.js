@@ -1,5 +1,6 @@
 import { call, fork, put, select, takeEvery } from 'redux-saga/effects';
 import { storedPokes, storedPokesList } from '../reducers/data';
+import { message } from 'antd';
 import * as Actions from '../actions';
 import Api from '../api';
 import * as Storage from '../storage';
@@ -13,7 +14,7 @@ function* getPokeList({ payload: { limit, offset } }) {
   try {
     result = yield call(Api.getPokemonsList, { limit, offset: pokeList.length });
   } catch(err) {
-    console.warn('Catched error at `getPokeList`:', err);
+    message.error('Catched error at `getPokeList`:', err);
   } finally {
     yield put(Action(Actions.POKE_LIST_LOADED, result));
   }
@@ -34,7 +35,7 @@ function* getPoke({ payload: name }) {
       try {
         result = yield call(Api.getPokemonByName, name);
       } catch (err) {
-        console.warn('Catched error at `getPoke`:', err);
+        message.error('Catched error at `getPoke`:', err);
       }
       yield put(Action(Actions.POKE_LOADED, result));
     }

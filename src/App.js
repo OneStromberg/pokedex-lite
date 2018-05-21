@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { Router } from 'react-router';
 import { Provider } from 'react-redux';
@@ -10,7 +10,6 @@ import history from './history';
 
 import Header from './components/Header';
 import Content from './components/Content';
-import Sider from './components/Sider';
 
 import "./styles.less"
 
@@ -24,43 +23,12 @@ function ApplicationWrapper({ children }) {
 	);
 }
 
-class App extends Component{
-	constructor(props) {
-		super(props);
-		this.state = {
-			overlay: false,
-		};
-	}
-	siderToggled = (d) => {
-		const collapsed = (d && d.collapsed) || null;
-		if (collapsed == null) {
-			this.setState({
-				overlay: !this.state.collapsed
-			});
-		} else {
-			this.setState({
-				overlay: !collapsed,
-			});
-		}
-	}
-	getChildContext = () => {
-		return { siderToggled: this.siderToggled };
-	}
-	onAppClick = () => {
-		if (this.state.overlay) {
-			this.setState({
-				overlay: !this.state.overlay,
-			});
-		}
-	}
+class App extends PureComponent {
 	render() {
-		const appClassName = cn('App', this.state.overlay && 'Overlay');
 		return (
 			<ApplicationWrapper>
 				<Layout>
-					<Sider collapsed={!this.state.overlay}/>
-					<Layout className={appClassName}
-							onClick={this.onAppClick}>
+					<Layout>
 						<Header/>
 						<Content/>
 					</Layout>
@@ -69,9 +37,5 @@ class App extends Component{
 		);
 	}
 }
-
-App.childContextTypes = {
-	siderToggled: PropTypes.func,
-};
 
 export default App;

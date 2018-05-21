@@ -4,9 +4,11 @@ import { withRouter } from 'react-router-dom';
 import { List, Spin, Progress, Card, Row, Col, Button } from 'antd';
 import Flexbox from 'flexbox-react';
 
-import data from './../../actions/data';
-import user from './../../actions/user';
+import * as data from './../../actions/data';
+import * as user from './../../actions/user';
 import { capitalizeFirstLetter } from './../../utils/strings';
+
+const BASE_STAT = 195;
 
 const Stats = ({ data }) => {
     return (<Card>
@@ -17,7 +19,7 @@ const Stats = ({ data }) => {
                     <div>
                         <b>{name}: </b>
                         <i>{base_stat}</i>
-                        <Progress percent={(base_stat / 195) * 100} showInfo={false}/>
+                        <Progress percent={(base_stat / BASE_STAT) * 100} showInfo={false}/>
                     </div>
                 </div>
             )
@@ -59,8 +61,8 @@ class PokeItem extends PureComponent {
     onClick = () => {
         const { expanded } = this.state;
         if (!expanded) {
-            const { name } = this.props;
-            data.loadPoke(name);
+            const { name, loadPoke } = this.props;
+            loadPoke(name);
             this.setState({
                 expanded: true
             })
@@ -71,7 +73,7 @@ class PokeItem extends PureComponent {
         }
     }
     render() {
-        const { name, pokes, savedPokes } = this.props;
+        const { name, pokes, savedPokes, savePoke } = this.props;
         const { expanded } = this.state;
         const saved = savedPokes && savedPokes.indexOf(name) !== -1;
         return (
@@ -80,7 +82,7 @@ class PokeItem extends PureComponent {
                     <Row>
                         <Col xs={{ span: 18, offset: 3 }} onClick={this.onClick}><h3>{capitalizeFirstLetter(name)}</h3></Col>
                         <Col xs={{ span: 3}}>
-                            <Button onClick={() => user.savePoke(name)} shape="circle" icon={saved ? "heart" : "heart-o"} />
+                            <Button onClick={() => savePoke(name)} shape="circle" icon={saved ? "heart" : "heart-o"} />
                         </Col>
                     </Row>
                 </List.Item>
@@ -94,4 +96,11 @@ const mapStateToProps = ({data: { pokes }, user: { savedPokes }}) => {
     return { user, pokes, savedPokes };
 };
 
-export default withRouter(connect(mapStateToProps)(PokeItem));
+const mapDispatchToProps = dispatch => {
+    return { 
+        loadPoke: (name) => dispatch(data.loadPoke(name)),
+        savePoke: (name) => dispatch(user.savePoke(name))
+     }
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PokeItem));

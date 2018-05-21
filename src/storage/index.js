@@ -1,5 +1,5 @@
 import ls from 'local-storage';
-
+import { message } from 'antd';
 const POKE = 'ls_saved_poke'
 
 export function savePoke(name) {
@@ -16,9 +16,20 @@ export function savePoke(name) {
   } else {
     stringedPoke = JSON.stringify([name]);
   }
-  ls.set(POKE, stringedPoke);
+  try {
+    ls.set(POKE, stringedPoke);
+  } catch (e) {
+    message.error('Error while saving to store');
+  }
 }
 
 export function getPokes() {
-  return JSON.parse(ls.get(POKE));
+  var pokes = null;
+  try {
+    pokes = JSON.parse(ls.get(POKE));
+  } catch {
+    message.error('Error while loading from storage');
+  }
+
+  return pokes;
 }

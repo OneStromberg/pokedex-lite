@@ -21,10 +21,6 @@ class H extends PureComponent {
     }
 }
 
-H.contextTypes = {
-	siderToggled: PropTypes.func,
-};
-
 const mapStateToProps = ({ data: { total }, user: { savedPokes } }) => {
 	return {
 		savedPokes, total

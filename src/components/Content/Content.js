@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroller';
 
 import Item from './../PokeItem';
-import data from './../../actions/data';
+import * as data from './../../actions/data';
 
 const { Content } = Layout;
 const ITEM_HEIGHT = 50;
@@ -21,8 +21,9 @@ class ContentWrapper extends PureComponent {
         }
     }
     componentDidMount() {
+        const { loadPokeList } = this.props;
         window.addEventListener('resize', this.handleInfiniteOnLoad);
-        data.loadPokeList(this.getNumInColumn());
+        loadPokeList(this.getNumInColumn());
     }
     getNumInColumn = () => {
         return parseInt(window.innerHeight / ITEM_HEIGHT) + 1;
@@ -35,7 +36,8 @@ class ContentWrapper extends PureComponent {
             this.setState({ hasMore: false });
             return;
         }
-        data.loadPokeList(this.getNumInColumn());
+        const { loadPokeList } = this.props;
+        loadPokeList(this.getNumInColumn());
     }
     render() {
         const { list } = this.props;
@@ -64,13 +66,21 @@ const mapStateToProps = ({ data: { list, total }, user: { savedPokes } }) => {
 	};
 };
 
-const ContentRouter = ({ list, total, savedPokes }) => {
+const mapDispatchToProps = dispatch => {
+    return { 
+        loadPokeList: (name) => dispatch(data.loadPokeList(name))
+     }
+}
+
+const ContentWrapperConnected = connect(mapStateToProps, mapDispatchToProps)(ContentWrapper);
+
+const ContentRouter = ({ list, total }) => {
     return (
         <Switch>
-            <Route exact path="/saved" render={() => <ContentWrapper list={savedPokes || null} total={savedPokes && savedPokes.length || 0} />}/>
-            <Route path="*" render={() => <ContentWrapper list={list || null} total={total || 0} />}/>
+            <Route exact path="/saved" render={() => <ContentWrapperConnected />}/>
+            <Route path="*" render={() => <ContentWrapperConnected />}/>
         </Switch>
     )
 }
 
-export default withRouter(connect(mapStateToProps)(ContentRouter));
+export default withRouter(ContentRouter);
