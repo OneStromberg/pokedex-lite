@@ -27,7 +27,7 @@ export function getPokes() {
   var pokes = null;
   try {
     pokes = JSON.parse(ls.get(POKE));
-  } catch {
+  } catch(e) {
     message.error('Error while loading from storage');
   }
 

@@ -1,9 +1,7 @@
 import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
 import { Router } from 'react-router';
 import { Provider } from 'react-redux';
 import { Layout } from 'antd';
-import cn from 'classnames';
 
 import store from './store';
 import history from './history';
